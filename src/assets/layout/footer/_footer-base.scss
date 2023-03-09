@@ -1,0 +1,26 @@
+// Footer base
+
+.app-footer {
+  /*height: $app-header-height;*/
+  height: 30px;
+
+  .app-footer__inner {
+    padding: 0 $layout-spacer-x 0 ($layout-spacer-x / 2);
+    /*height: $app-header-height; */
+    height: 30px;
+
+    display: flex;
+    align-content: center;
+    align-items: center;
+
+    .app-footer-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .app-footer-right {
+      margin-left: auto;
+      display: flex;
+    }
+  }
+}
