@@ -18,7 +18,7 @@
             <div class="form-row">
               <div class="col-md-6">
                 <div class="position-relative form-group">
-                   <a href="javascript:void(0);" @click="showModalInclirDoc()" class="btn-lg btn btn-link">
+                  <a href="javascript:void(0);" @click="showModalInclirDoc()" class="btn-lg btn btn-link">
                   <font-awesome-icon icon="plus"/>&nbsp;Adicionar documento</a>
                 </div>
               </div>
@@ -155,8 +155,6 @@
         { key: 'dataCadastro', label: 'Data Cadastro', class: 'text-center', sortable: true, sortDirection: 'desc' },
         { key: 'actions', label: 'Ação' , class: 'text-center' }
       ],
-      
-      //items: [],
 
       showModalIncluiDoc: false,
       idModelIncluiDoc:{

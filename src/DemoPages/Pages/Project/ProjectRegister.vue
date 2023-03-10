@@ -53,16 +53,16 @@
                   <multiselect v-model="projeto.tipoDocumentacoes" 
                      name="TipoDocumentacao" 
                     :options="tipo_documentacoes" 
-                    :multiple="true"
-                    :close-on-select="false" 
-                    :clear-on-select="true" 
+                    :multiple="!editando"
+                    :preselect-first="false"
                     :preserve-search="true" 
+                    :clear-on-select="true" 
+                    :close-on-select="editando" 
                     :data-deselect="'Pressione enter para remover'" 
                     :placeholder="'Tipo de Documentação'" 
                     :select-label="'Selecione'"
                     :selected-label="'Selecionado'"
                     :deselect-label="'Remover'"
-                    :preselect-first="false"
                     label="nome"
                     track-by="nome"
                   >
@@ -72,7 +72,6 @@
                     </template>
                     <span slot="noResult">Não foi possível encontrar.</span>
                   </multiselect>
-                  
                 </div>
               </div>
             
@@ -191,6 +190,8 @@
 
       estados: ["Acre",  "Alagoas",  "Amapá",  "Amazonas",  "Bahia",  "Ceará",  "Distrito Federal",  "Espírito Santo",  "Goiás",  "Maranhão",  "Mato Grosso",  "Mato Grosso do Sul",  "Minas Gerais",  "Pará",  "Paraíba",  "Paraná",  "Pernambuco",  "Piauí",  "Rio de Janeiro",  "Rio Grande do Norte",  "Rio Grande do Sul",  "Rondônia",  "Roraima",  "Santa Catarina",  "São Paulo",  "Sergipe",  "Tocantins"],
 
+      editando: false,
+
       clientes: [],
       sharings: [],
       tipo_documentacoes: [],
@@ -306,7 +307,16 @@
             });
 
         }else{
-          // console.log('Atualizando projeto ' +  JSON.stringify(this.projeto)); 
+
+          
+          if( !Array.isArray( this.projeto.tipoDocumentacoes ) ){
+         
+            let tipoDocumentacao = this.projeto.tipoDocumentacoes;
+            this.projeto.tipoDocumentacoes = [];
+            this.projeto.tipoDocumentacoes.push( tipoDocumentacao )
+          }
+      
+           //console.log('Atualizando projeto ' +  JSON.stringify(this.projeto)); 
            api
               .put(`/projeto/${this.$route.params.id}`, this.projeto )
               .then((res) => {
@@ -334,6 +344,7 @@
       carregar(id){
          
         if(id != undefined){
+          this.editando = true;     
 
           this.$refs.Spinner.show();
 
@@ -360,6 +371,8 @@
               });
               console.log(error);
             });
+        }else{
+          this.editando = false;     
         }
       }
     }

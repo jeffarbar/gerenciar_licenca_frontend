@@ -109,6 +109,7 @@
         heading: 'Painel',
         subheading: 'Painel de controle.',
         icon: 'pe-7s-drawer icon-gradient bg-happy-itmeo',
+        link: '',
 
         filter: null,
         filterOn: [],

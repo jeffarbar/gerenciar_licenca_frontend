@@ -5,6 +5,13 @@
     <vue-instant-loading-spinner ref="Spinner" color="#660099">
     </vue-instant-loading-spinner>
     
+    <p>
+    
+      <button v-if="perfil == 'MASTER' || perfil == 'SHARING'" class="mt-2 btn btn-vivo" @click="showModalInclirDoc()">
+        Incluir Documento
+      </button>
+    </p>
+
     <b-card v-for="(doc, index) in documentos" :key="index" no-body class="mb-1">
 
       <!-- {{ doc }} -->
@@ -199,7 +206,7 @@
       
     </b-modal>
   
-    <b-modal :id="infoModal.id"  size="lg" v-model="showInfoModal" :title="infoModal.title" ok-only @hide="resetInfoModal">
+    <b-modal :id="infoModal.id" size="lg" v-model="showInfoModal" :title="infoModal.title" ok-only @hide="resetInfoModal">
       <template v-slot:modal-footer="{ hide }">
         <b-button size="sm" variant="outline-vivo" @click="hide()">
           Fechar
@@ -217,6 +224,76 @@
     <!--<pre>{{ infoModal.content }}</pre> -->
     </b-modal>
    
+
+    
+    <b-modal :id="idModelIncluiDoc.id" v-model="showModalIncluiDoc" :title="idModelIncluiDoc.title" ok-only @hide="resetInfoModal">
+      <template v-slot:modal-footer="{ hide }">
+        <b-button size="sm" variant="outline-vivo" @click="hide()">
+          Fechar
+        </b-button>
+        <b-button  size="sm" variant="outline-vivo" @click="salvaDoc()">
+          Salva
+        </b-button>
+        
+      </template>
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <label for="nome" class="">Nome do Documento</label>
+          <input name="nome" size="sm" id="nome" v-model="documento_incluido" required placeholder="Comprovante X" type="text" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <br>
+          <a href="javascript:void(0);" @click="incluirDoc()" class="btn-lg btn btn-link">
+            <font-awesome-icon icon="plus"/>&nbsp;Adicionar documento
+          </a>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-12"  >
+          <br>
+          <b-table :striped="true"
+            :bordered="false"
+            :outlined="false"
+            :small="true"
+            :hover="true"
+            :dark="false"
+            :fixed="true"
+            :foot-clone="false"
+            :items="documentosInseridos"
+            :fields="fields"
+            stacked="md"
+            :filter="filter"
+            :filter-included-fields="filterOn"
+            @filtered="onFiltered"
+            show-empty
+            >
+
+          <template #empty>
+            <p align="center">Não existe documento.</p>
+          </template>
+
+          <template #cell(obrigatorio)="row">
+            <b-form-checkbox :disabled="true" v-model="row.item.obrigatorio" >
+            </b-form-checkbox>
+          </template>
+
+          <template #cell(actions)="row">
+
+              <b-button class="border-0 btn-transition btn btn-outline-vivo" size="sm" @click="excluirDoc(row.item, $event.target)">
+                <font-awesome-icon icon="trash-alt"/>
+              </b-button>
+              
+            </template>
+
+          </b-table>
+
+        </div>
+      </div>
+
+    </b-modal>
+ 
   </div>
 </template>
 
@@ -281,7 +358,30 @@
           idInfo: undefined,
           title: '',
           content: ''
-        }
+        },
+
+        perfil: null,
+
+        documentosInseridos: [],
+
+        filter: null,
+        filterOn: [],
+
+        documento_incluido: null,
+        
+        fields: [ 
+          { key: 'nome', label: 'Documento', sortable: true, sortDirection: 'desc' },
+          { key: 'actions', label: 'Ação' , class: 'text-center' }
+        ],
+
+        showModalIncluiDoc: false,
+        idModelIncluiDoc:{
+          id: 'info-inclui-doc-modal',
+          idDoc: undefined,
+          title: 'Inserir',
+          content: 'Por favor, preencha os campos'
+        },
+
       }
     },
     methods: {
@@ -290,7 +390,10 @@
       },
       recuperaToken(){
         let usuario =  JSON.parse( localStorage.getItem('usuario') );
+        
         //console.log('TOKEN ' + JSON.stringify( usuario))
+
+        this.perfil = usuario.perfil
         this.isMaster = usuario.master
         this.nomeUsuario = usuario.username;
         this.token = usuario && usuario.jwttoken ? `Bearer ${usuario.jwttoken}` : '';
@@ -412,7 +515,7 @@
           api
             .put(`/documento/${this.$route.params.id}/${idDoc}`)
             .then((res) => {
-              console.log( res.data )
+              //console.log( res.data )
               
               window.location.reload();
               
@@ -441,7 +544,7 @@
           api
             .delete(`/documento/${this.$route.params.id}/${idDoc}`)
             .then((res) => {
-              console.log( res.data )
+              //console.log( res.data )
               if(carregar){
                 window.location.reload();
               }
@@ -468,6 +571,7 @@
         this.$refs.button_upload[ index ].disabled = false;
 
       },
+
       onBeforeDelete(fileRecord, index) {
         
         if (confirm('Tem certeza de que deseja excluir?')) {
@@ -589,6 +693,79 @@
         this.notificacaoModal.idNotificacao = undefined
         this.showModalNotificacao=false
       },
+
+
+      incluirDoc(){
+
+        if(this.documento_incluido != null){
+
+          let _id = this.documentosInseridos.length + 1
+          this.documentosInseridos.push( 
+            { 
+              id: _id, 
+              nome: this.documento_incluido, 
+            } 
+          )
+          this.documento_incluido = null
+        }
+      },
+
+      excluirDoc(item) {
+        
+        let indice =  this.documentosInseridos.indexOf(item);
+        this.documentosInseridos.splice( indice , 1);
+      },
+
+      salvaDoc(){
+
+        if( this.documentosInseridos.length > 0 ){
+
+          this.$refs.Spinner.show();
+
+          api
+            .put(`/documento/incluirDoc/${this.$route.params.id}`, JSON.stringify( this.documentosInseridos ))
+            .then((res) => {
+              this.documentosInseridos = []
+              window.location.reload();
+              this.$refs.Spinner.hide();
+            })
+            .catch((error) => {
+              this.$refs.Spinner.hide();
+              this.$notify({
+                type: 'error',
+                title: 'Erro',
+                text: 'Ocorreu um erro na sua solicitação!'
+              });
+              console.log(error);
+            });
+
+        }else{
+
+          this.$notify({
+              type: 'error',
+              title: 'Erro',
+              text: 'Favor incluir documento!'
+            });
+
+        }
+
+        this.showModalIncluiDoc = false;
+        this.documento_incluido = null;
+
+      },
+
+      showModalInclirDoc(){
+        this.showModalIncluiDoc = true
+        this.documento_incluido = null,
+        this.obrigatorio_incluido = false,
+        this.idModelIncluiDoc.title = 'Inserir Documento'
+      },
+
+      onFiltered(filteredItems) {
+        this.totalRows = filteredItems.length
+        this.currentPage = 1
+      }
+
     },
     mounted() {
       this.listaProjetos(this.$route.params.id)
