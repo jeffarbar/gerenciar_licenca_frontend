@@ -6,15 +6,14 @@
     </vue-instant-loading-spinner>
     
     <p>
-    
-      <button v-if="perfil == 'MASTER' || perfil == 'SHARING'" class="mt-2 btn btn-vivo" @click="showModalInclirDoc()">
+      <button v-if="perfil == 'ADMIN' || perfil == 'MASTER' || perfil == 'SHARING'" class="mt-2 btn btn-vivo" @click="showModalInclirDoc()">
         Incluir Documento
       </button>
     </p>
 
     <b-card v-for="(doc, index) in documentos" :key="index" no-body class="mb-1">
 
-      <!-- {{ doc }} -->
+    <!-- {{ doc }} --> 
 
       <div v-if="doc.statusArquito == 'PENDENTE'">
 			
@@ -28,7 +27,7 @@
           </b-button>
           &nbsp;
 
-          <b-button v-if="(doc.notificacaoRecebidaMaster && isMaster) || (doc.notificacaoRecebidaUsuario && !isMaster)" class="border-0 btn-transition btn btn-vivo pull-right" size="sm" @click="showNotificacao(doc.id, doc.notificacoes)">
+          <b-button v-if="(doc.notificacaoRecebidaMaster && (isMaster ||  perfil=='SHARING' ) ) || (doc.notificacaoRecebidaUsuario && !isMaster)" class="border-0 btn-transition btn btn-vivo pull-right" size="sm" @click="showNotificacao(doc.id, doc.notificacoes)">
             <i class="pe-7s-chat" title="Você tem uma nova mensagem" style="font-size:17px;font-weight: bold;"> </i>
           </b-button>
 
@@ -84,7 +83,7 @@
           </b-button>
           &nbsp;
 
-          <b-button v-if="(doc.notificacaoRecebidaMaster && isMaster) || (doc.notificacaoRecebidaUsuario && !isMaster)" class="border-0 btn-transition btn btn-vivo pull-right" size="sm" @click="showNotificacao(doc.id, doc.notificacoes)">
+          <b-button v-if="(doc.notificacaoRecebidaMaster && (isMaster || perfil=='SHARING')) || (doc.notificacaoRecebidaUsuario && !isMaster)" class="border-0 btn-transition btn btn-vivo pull-right" size="sm" @click="showNotificacao(doc.id, doc.notificacoes)">
             <i class="pe-7s-chat" title="Você tem uma nova mensagem" style="font-size:17px;font-weight: bold;"> </i>
           </b-button>
 
@@ -156,10 +155,10 @@
             </center>
             <br>
             <p align="right">
-              <button v-if="doc.statusArquito !='APROVADO' && isMaster" class="mt-2 btn btn-vivo" @click="aprovar(doc.id)">
+              <button v-if="( doc.statusArquito !='APROVADO' && isMaster) || ( doc.statusArquito !='APROVADO' && perfil=='SHARING' && doc.incluirSharing)" class="mt-2 btn btn-vivo" @click="aprovar(doc.id)">
                 Aprovar documento
               </button>&nbsp;&nbsp; 
-              <button v-if="isMaster" class="mt-2 btn btn-vivo" @click="deleteFiles(doc.id, index, true)">
+              <button v-if="isMaster || ( perfil=='SHARING' && doc.incluirSharing)" class="mt-2 btn btn-vivo" @click="deleteFiles(doc.id, index, true)">
                 Rejeitar documento
               </button>
             </p>
@@ -245,7 +244,7 @@
         <div class="col-md-6">
           <br>
           <a href="javascript:void(0);" @click="incluirDoc()" class="btn-lg btn btn-link">
-            <font-awesome-icon icon="plus"/>&nbsp;Adicionar documento
+            &nbsp;Adicionar documento
           </a>
         </div>
       </div>
@@ -254,6 +253,7 @@
         <div class="col-md-12"  >
           <br>
           <b-table :striped="true"
+            responsive
             :bordered="false"
             :outlined="false"
             :small="true"
@@ -336,6 +336,7 @@
         },
         nomeUsuario: '',
         isMaster: false,
+  
         token: null,
         images:[],
         //urlDownloadImagem: 'http://127.0.0.1:8090/gd/api/v1',

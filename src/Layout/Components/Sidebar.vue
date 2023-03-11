@@ -62,7 +62,7 @@
             montaMenu(){
                 const usuario =  JSON.parse( localStorage.getItem('usuario') );
 
-                if( usuario && usuario.perfil == 'MASTER' ){
+                if( usuario && usuario.perfil == 'MASTER' || usuario.perfil == 'ADMIN'){
                     this.menu.push(
                         {
                             title: 'Painel de Controle',

@@ -40,6 +40,7 @@
         ></b-pagination>
         <p class="mt-3"><small>Pagina atual </small><b>{{ currentPage }}</b></p>
         <b-table :striped="true"
+          responsive
           :bordered="false"
           :outlined="false"
           :small="true"
@@ -56,6 +57,7 @@
           show-empty
           :per-page="perPage"
           :current-page="currentPage"
+   
           >
 
           <template #emptyfiltered>

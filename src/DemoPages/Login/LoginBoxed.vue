@@ -94,7 +94,7 @@
                     .then((res) => {
 
                         localStorage.setItem('usuario', JSON.stringify(res.data))
-                        if(res.data.perfil == 'MASTER' || res.data.perfil == 'SHARING'){
+                        if( res.data.perfil == 'ADMIN' || res.data.perfil == 'MASTER' || res.data.perfil == 'SHARING'){
                             this.$router.push( '/controlPanelGrouped' )
                         }else{
                             this.$router.push( `/controlPanel/${res.data.idCliente}` )

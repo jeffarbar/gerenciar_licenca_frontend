@@ -27,6 +27,7 @@
               <div class="col-md-12"  >
                 <br>
                   <b-table :striped="true"
+                    responsive
                     :bordered="false"
                     :outlined="false"
                     :small="true"
@@ -105,15 +106,15 @@
                   </div>
                 </div>
               </div>
+              <!-- 
               <div class="form-row">
                 <div class="col-md-6">
                   <b-form-checkbox name="check" v-model="obrigatorio_incluido" id="exampleCheck">
                       Obrigatório?
                   </b-form-checkbox>
                 </div>
-
               </div>
-
+                 -->
             </b-modal>
             
         </div>
@@ -151,7 +152,6 @@
 
       fields: [ 
         { key: 'nome', label: 'Documento', sortable: true, sortDirection: 'desc' },
-        { key: 'obrigatorio', label: 'Obrigatório', class: 'text-center', sortable: true, sortDirection: 'desc' },
         { key: 'dataCadastro', label: 'Data Cadastro', class: 'text-center', sortable: true, sortDirection: 'desc' },
         { key: 'actions', label: 'Ação' , class: 'text-center' }
       ],
@@ -305,7 +305,7 @@
             if( element.id == idDoc){
                 element.nome = this.documento_incluido
                 element.obrigatorio = this.obrigatorio_incluido
-                console.log('TESTE EDITAR ' + idDoc)
+               // console.log('TESTE EDITAR ' + idDoc)
             }
           });
           this.resetInfoModalIncluirDoc();
@@ -320,8 +320,8 @@
           let _id = this.documentacao.documentos.length + 1
           let _data = this.formataData( current.getDate())+'/'+this.formataData( current.getMonth()+1)+'/'+current.getFullYear();
 
-          console.log('Documento incluido id ' + _id);
-          console.log('Documento incluido data ' + _data);
+         // console.log('Documento incluido id ' + _id);
+         // console.log('Documento incluido data ' + _data);
           
           this.documentacao.documentos.push( 
             { 

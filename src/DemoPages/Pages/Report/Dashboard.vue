@@ -5,11 +5,13 @@
     </vue-instant-loading-spinner>
     <page-title :heading=heading :subheading=subheading :icon=icon :link=link></page-title>
 
-    <div class="main-card mb-3 card">
+    <div class="content">
+  
+      <div class="main-card mb-3 card">
         <div class="card-body">
           <form @submit.prevent="grafico" class="">
             <div class="form-row">
-
+          
               <div class="col-md-6">
 
                 <v-select 
@@ -60,13 +62,14 @@
                 </b-button>
                 
               </div>
-            </div>
+              </div>
+           
           </form>
         </div>
-    </div>
-
+      </div>
+     
     <div class="mt-2">
-      <b-card-group deck>
+      <b-card-group deck  >
 
         <b-card
         
@@ -79,7 +82,7 @@
           text-variant="white" 
           class="text-center"
           title-tag="h1"
-          style="max-height: 9em; max-width: 25%;"
+       
         
         >
 
@@ -95,7 +98,7 @@
           text-variant="white" 
           class="text-center"
           title-tag="h1"
-          style="max-height: 9em; max-width: 25%;"
+         
         >
         </b-card>
      
@@ -109,7 +112,7 @@
           text-variant="white" 
           class="text-center"
           title-tag="h1"
-          style="max-height: 9em; max-width: 25%;"
+         
         >
         </b-card>
         <b-card 
@@ -122,14 +125,14 @@
           class="text-center"
           :title="quantidadeDocumentoTotal"  
           title-tag="h1"
-          style="max-height: 9em; max-width: 25%;"
+         
         >
         </b-card>
        
       </b-card-group>
 
     </div>
-    <div class="mt-3">
+    <div class="mt-2">
       <b-card-group deck>
 
         <b-card 
@@ -142,13 +145,13 @@
       </b-card-group>
     </div>
    
-    <div class="mt-3">
+    <div class="mt-2">
       <b-card-group deck>
         <b-card
           header="Quantidade de projeto por localidade"
           tag="article"
           class="mb-1"
-          style="max-width: 60%;"
+         
         >
        
 
@@ -165,7 +168,7 @@
         <b-card
           header="Projeto por Cliente"
           tag="article"
-          style="max-width: 40%;"
+         
           class="mb-1"
         >
 
@@ -174,7 +177,7 @@
         </b-card>
       </b-card-group>
     </div>
-    
+    </div>
   </div>
 
 </template>

@@ -45,6 +45,7 @@
                 <p class="mt-3"><small>Pagina atual </small><b>{{ currentPage }}</b></p>
                 
                 <b-table :striped="true"
+                  responsive
                   :bordered="false"
                   :outlined="false"
                   :small="true"
@@ -171,7 +172,7 @@
             this.$notify({
               type: 'error',
               title: 'Erro',
-              text: 'Ocorreu um erro na sua solicitação!'
+              text: 'Ocorreu um erro na sua solicitação! Favor validar se sua empresa esat cadastrada.'
             });
           });
       },
