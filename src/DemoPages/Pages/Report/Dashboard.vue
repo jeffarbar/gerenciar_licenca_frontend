@@ -249,6 +249,7 @@
               0: {side: 'top'}
             }
           },
+          legend: { position: 'bottom' },
         },
 
 
