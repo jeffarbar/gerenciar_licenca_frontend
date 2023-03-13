@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "aksgdvivo-8a2f"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "aksgdvivo-8a2f"
+  template:
+    metadata:
+      labels:
+        app: "aksgdvivo-8a2f"
+    spec:
+      containers:
+        - name: "aksgdvivo-8a2f"
+          image: "acrgdvivo.azurecr.io/aksgdvivo"
+          ports:
+          - containerPort: 80
